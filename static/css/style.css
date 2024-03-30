@@ -80,8 +80,10 @@ section{
 .job_header > article:nth-child(4),
 .job_body > article:nth-child(4),
 .job_header > article:nth-child(5),
-.job_body > article:nth-child(5){
-    width: 250px;
+.job_body > article:nth-child(5),
+.job_header > article:nth-child(6),
+.job_body > article:nth-child(6){
+    width: 200px;
 }
 .finished{
     background-color: rgb(157, 228, 136);

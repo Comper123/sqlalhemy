@@ -3,10 +3,10 @@ import sqlalchemy
 from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
 
-# ##### Это надо отправить -- начало{
-# Модель Работы
-class Jobs(SqlAlchemyBase):
+
+class Jobs(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'jobs'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -19,6 +19,5 @@ class Jobs(SqlAlchemyBase):
     team_leader = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')
 
-    # ##### Это надо отправить -- конец}
     def __repr__(self):
         return f'<Job> {self.job}'

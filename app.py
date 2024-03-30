@@ -1,4 +1,4 @@
-from flask import Flask 
+from flask import Flask, Blueprint 
 from flask import render_template # Функция возвращения шаблона
 from flask import request, redirect, abort
 from flask_login import LoginManager # Авторизация
@@ -12,6 +12,8 @@ from forms.register import RegisterForm # Форма регистрации
 from forms.job import JobForm # Форма работы
 from data.departments import Department
 from forms.department import DepartmentForm
+import api
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -229,5 +231,9 @@ def department_delete(id):
     return redirect('/departments')
 
 
+
+
+
 if __name__ == '__main__':
+    app.register_blueprint(api.blueprint)
     main()
