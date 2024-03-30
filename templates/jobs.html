@@ -1,92 +1,9 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-</head>
-<style>
+{% extends "base.html" %}
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body{
-    display: flex;
-    width: 100vw;
-    flex-direction: column;
-    align-items: center;
-}
-
-h1{
-    margin-top: 50px;
-    margin-bottom: 100px;
-}
-.job{
-    width: 1600px;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 50px;
-}
-.job > article > article{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.job_header{
-    height: 50px;
-    display: flex;
-    width: 1600px;
-}
-.job_body{
-    height: 100px;
-    display: flex;
-    width: 1600px;
-}
-.job_header article{
-    background-color: rgb(113, 113, 113);
-    font-size: 24px;
-    font-weight: 800;
-}
-.main_info{
-    background-color: rgb(193, 190, 190);
-    font-size: 18px;
-}
-.job_body article{
-    height: 100px;
-}
-.job_header article{
-    height: 50px;
-}
-.job_header > article:nth-child(1),
-.job_body > article:nth-child(1){
-    width: 600px;
-}
-
-.job_header > article:nth-child(2),
-.job_body > article:nth-child(2),
-.job_header > article:nth-child(3),
-.job_body > article:nth-child(3),
-.job_header > article:nth-child(4),
-.job_body > article:nth-child(4),
-.job_header > article:nth-child(5),
-.job_body > article:nth-child(5){
-    width: 250px;
-}
-.finished{
-    background-color: rgb(157, 228, 136);
-    font-size: 18px;
-}
-.not_finished{
-    background-color: rgb(191, 105, 105);
-    font-size: 18px;
-}
-</style>
-<body>
-    <h1>Works log</h1>
+{% block title %}Jobs{% endblock %}
+{% block content %}
+<section>
+    <p class="h1">Works log</p>
     <article class="jobs">
     {% for job in data["jobs"] %}
         <article class="job">
@@ -112,5 +29,5 @@ h1{
         </article>
     {% endfor %}
     </article>
-</body>
-</html>
+</section>
+{% endblock %}
