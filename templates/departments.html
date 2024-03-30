@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Departments{% endblock %}
+{% block content %}
+<section>
+    <p class="h1">List of Departments</p>
+    <article class="jobs">
+        {% if current_user.is_authenticated %}
+            <a class="btn btn-secondary" href="/adddepartment">Добавить отдел</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="/">Главная</a>
+        {% for dep in data["departments"] %}
+        <article class="job">
+            <h2>Department # {{ dep.id }}</h2>
+            <article class="job_header">
+                <article><p class="header_text">Title of department</p></article>
+                <article><p class="header_text">Chief</p></article>
+                <article><p class="header_text">Members</p></article>
+                <article><p class="header_text">Department email</p></article>
+            </article>
+            <article class="job_body">
+                <article class="main_info"><p>{{ dep.title }}</p></article>
+                <article class="main_info"><p>{{ data["users"][dep.chief] }}</p></article>
+                <article class="main_info"><p>{{ dep.members }} hours</p></article>
+                <article class="main_info"><p>{{ dep.email }}</p></article>
+            </article>
+            {% if current_user.is_authenticated and (current_user.id == dep.chief or current_user.id == 1) %}
+            <div class="mt-2">
+                <a href="/department/{{ dep.id }}" class="btn btn-warning">
+                    Изменить отдел
+                </a>
+                <a href="/departments_delete/{{ dep.id }}" class="btn btn-danger">
+                    Удалить отдел
+                </a>
+            </div>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </article>
+</section>
+{% endblock %}
