@@ -23,3 +23,20 @@ def get_jobs():
                                      'team_leader')) for j in jobs]
         }
     )
+
+
+@blueprint.route('/api/jobs/<int:jobs_id>', methods=['GET'])
+def get_one_news(jobs_id):
+    db_sess = db_session.create_session()
+    job = db_sess.query(Jobs).get(jobs_id)
+    if not job:
+        return flask.make_response(flask.jsonify({'error': 'Not found'}), 404)
+    return flask.jsonify(
+        {
+            'job': job.to_dict(only=('job', 
+                                     'work_size', 
+                                     'collaborators',
+                                     'is_finished',
+                                     'team_leader'))
+        }
+    )
