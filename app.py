@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint 
+from flask import Flask, jsonify
 from flask import render_template # Функция возвращения шаблона
 from flask import request, redirect, abort
 from flask_login import LoginManager # Авторизация
@@ -13,6 +13,7 @@ from forms.job import JobForm # Форма работы
 from data.departments import Department
 from forms.department import DepartmentForm
 import api
+from flask import make_response
 
 
 app = Flask(__name__)
@@ -231,7 +232,14 @@ def department_delete(id):
     return redirect('/departments')
 
 
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
 if __name__ == '__main__':
