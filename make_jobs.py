@@ -12,10 +12,10 @@ def main():
     session = db_session.create_session()
 
     job = Jobs()
-    job.team_leader = 1
-    job.job = "deployment of residential modules 1 and 2"
-    job.work_size = 15
-    job.collaborators = "2, 3"
+    job.team_leader = 3
+    job.job = "meet new astronauts"
+    job.work_size = 1
+    job.collaborators = str([1, 4])
     job.start_date
     job.is_finished = False
     session.add(job)
