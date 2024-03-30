@@ -4,11 +4,12 @@ from flask import request, redirect
 from flask_login import LoginManager # Авторизация
 from flask_login import login_user, login_required, logout_user # Функция авторизации
 
-from data import db_session
+from data import db_session # Сессия с базой данных
 from forms.login import LoginForm # Форма авторизации
 from data.jobs import Jobs # Модель работы
 from data.users import User # Модель пользователя
 from forms.register import RegisterForm # Форма регистрации
+from forms.job import JobForm # Форма работы
 
 
 app = Flask(__name__)
@@ -91,6 +92,25 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/addjob', methods=['POST', 'GET'])
+def add_job():
+    form = JobForm()
+    if form.validate_on_submit():
+        job = Jobs(
+            job=form.job.data,
+            work_size=form.work_size.data,
+            team_leader=form.team_leader.data,
+            collaborators=form.collaborators.data,
+            is_finished=form.is_finished.data
+        )
+        session = db_session.create_session()
+        session.add(job)
+        session.commit()
+        return redirect('/')
+    return render_template('addjob.html', form=form, title='Добавить работу')
+    
 
 if __name__ == '__main__':
     main()

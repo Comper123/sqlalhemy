@@ -28,6 +28,9 @@
             </article>
         </article>
     {% endfor %}
+    {% if current_user.is_authenticated %}
+        <a class="btn btn-primary mb-5 mt-5" href="/addjob">Добавить работу</a>
+    {% endif %}
     </article>
 </section>
 {% endblock %}

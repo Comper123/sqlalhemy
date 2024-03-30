@@ -33,7 +33,7 @@ section{
 }
 .job{
     width: 1600px;
-    height: 150px;
+    height: 200px;
     display: flex;
     flex-direction: column;
     margin-bottom: 50px;
