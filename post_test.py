@@ -1,4 +1,4 @@
-from requests import post, get
+from requests import post, get, put
 
 
 # Пустой запрос
