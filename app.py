@@ -5,7 +5,8 @@ from flask_login import LoginManager # Авторизация
 from flask_login import login_user, login_required, logout_user, current_user # Функция авторизации
 from flask import make_response
 import requests
-from os import listdir, path
+from os import listdir
+from flask_restful import Api
 
 from data import db_session # Сессия с базой данных
 from forms.login import LoginForm # Форма авторизации
@@ -16,11 +17,12 @@ from forms.job import JobForm # Форма работы
 from data.departments import Department
 from forms.department import DepartmentForm
 import api
-
+import users_api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-DIR = path.dirname(path.realpath(__file__))
+
+api2 = Api(app)
 
 # Настройки для авторизации пользователей
 login_manager = LoginManager()
@@ -265,9 +267,9 @@ def show_user_city(user_id):
                 with open(map_file, 'wb') as map_1:
                     map_1.write(content)
             else:
-                abort(404)
+                abort(404, message=f"Такого города не существует")
     except KeyError:
-        abort(404)
+        abort(404, message=f"Пользователь не найден")
         
     data = {
         'user': f"{user['name']} {user['surname']}",
@@ -275,6 +277,13 @@ def show_user_city(user_id):
         'img': f"img/{user['city_from']}.png"
     }
     return render_template('city.html', data=data)
+
+
+# для списка объектов
+api2.add_resource(users_api.UserListResource, '/api/v2/users') 
+
+# для одного объекта
+api2.add_resource(users_api.UserResource, '/api/v2/users/<int:user_id>')
 
 
 if __name__ == '__main__':
