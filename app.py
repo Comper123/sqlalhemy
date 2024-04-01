@@ -18,6 +18,7 @@ from data.departments import Department
 from forms.department import DepartmentForm
 import api
 import users_api
+import jobs_api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -238,16 +239,6 @@ def department_delete(id):
     return redirect('/departments')
 
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-
-@app.errorhandler(400)
-def bad_request(_):
-    return make_response(jsonify({'error': 'Bad Request'}), 400)
-
-
 @app.route('/users_show/<int:user_id>')
 def show_user_city(user_id):
     try:
@@ -284,6 +275,22 @@ api2.add_resource(users_api.UserListResource, '/api/v2/users')
 
 # для одного объекта
 api2.add_resource(users_api.UserResource, '/api/v2/users/<int:user_id>')
+
+# для списка объектов
+api2.add_resource(jobs_api.JobsListResource, '/api/v2/jobs') 
+
+# для одного объекта
+api2.add_resource(jobs_api.JobResource, '/api/v2/jobs/<int:job_id>')
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.errorhandler(400)
+def bad_request(_):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)
 
 
 if __name__ == '__main__':
