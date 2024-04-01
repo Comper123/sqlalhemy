@@ -3,6 +3,9 @@ from flask import render_template # Функция возвращения шаб
 from flask import request, redirect, abort
 from flask_login import LoginManager # Авторизация
 from flask_login import login_user, login_required, logout_user, current_user # Функция авторизации
+from flask import make_response
+import requests
+from os import listdir, path
 
 from data import db_session # Сессия с базой данных
 from forms.login import LoginForm # Форма авторизации
@@ -13,15 +16,16 @@ from forms.job import JobForm # Форма работы
 from data.departments import Department
 from forms.department import DepartmentForm
 import api
-from flask import make_response
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+DIR = path.dirname(path.realpath(__file__))
 
 # Настройки для авторизации пользователей
 login_manager = LoginManager()
 login_manager.init_app(app)
+yandex_geocoder_api_key = '40d1649f-0493-4b70-98ba-98533de7710b'
 
 
 def main():
@@ -240,6 +244,37 @@ def not_found(error):
 @app.errorhandler(400)
 def bad_request(_):
     return make_response(jsonify({'error': 'Bad Request'}), 400)
+
+
+@app.route('/users_show/<int:user_id>')
+def show_user_city(user_id):
+    try:
+        user = requests.get(f'http://127.0.0.1:5000/api/users/{user_id}').json()['user']
+        if user['city_from'] + ".png" not in [f for f in listdir('./static/img')]:
+            link = f'http://geocode-maps.yandex.ru/1.x/?apikey={yandex_geocoder_api_key}&geocode={user["city_from"]}&format=json'
+            response = requests.get(link)
+            if response:
+                data = response.json()
+                object = data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+                coords = list(map(float, object["Point"]["pos"].split()))
+                x, y = coords
+
+                map_link = f"https://static-maps.yandex.ru/1.x/?ll={x},{y}&l=map&z=10"
+                content = requests.get(map_link).content
+                map_file = f"./static/img/{user['city_from']}.png"
+                with open(map_file, 'wb') as map_1:
+                    map_1.write(content)
+            else:
+                abort(404)
+    except KeyError:
+        abort(404)
+        
+    data = {
+        'user': f"{user['name']} {user['surname']}",
+        'city': user["city_from"],
+        'img': f"img/{user['city_from']}.png"
+    }
+    return render_template('city.html', data=data)
 
 
 if __name__ == '__main__':

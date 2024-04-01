@@ -109,7 +109,8 @@ def get_users():
                                      'position',
                                      'speciality',
                                      'address',
-                                     'email')) for u in users]
+                                     'email',
+                                     'city_from')) for u in users]
         }
     )
 
@@ -128,7 +129,8 @@ def get_one_user(user_id):
                                      'position',
                                      'speciality',
                                      'address',
-                                     'email'))
+                                     'email',
+                                     'city_from'))
         }
     )
 
@@ -139,7 +141,7 @@ def create_user():
         return make_response(jsonify({'error': 'Empty request'}), 400)
     elif not all(key in request.json for key in
                  ['surname', 'name', 'age', 'position', 'speciality',
-                  'address', 'email']):
+                  'address', 'email', 'city_from']):
         return flask.make_response(flask.jsonify({'error': 'Bad request'}), 400)
     db_sess = db_session.create_session()
     user = User(
@@ -149,7 +151,8 @@ def create_user():
         position=request.json['position'],
         speciality=request.json['speciality'],
         address=request.json['address'],
-        email=request.json['email']
+        email=request.json['email'],
+        city_from=request.json['city_from']
     )
     db_sess.add(user)
     db_sess.commit()
